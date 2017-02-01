@@ -48,6 +48,34 @@ object List {
     case Cons(b, bs) => Cons(a, bs)
   }
 
+  // Exercise 6
+  def init[A](as: List[A]): List[A] = as match {
+    case Nil => Nil
+    case Cons(_, Nil) => Nil
+    case Cons(a, as2) => Cons(a, init(as2))
+  }
+
+  def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = as match {
+    case Nil => z
+    case Cons(a, as2) => f(a, foldRight(as2, z)(f))
+  }
+
+  def foldSum(ints: List[Int]): Int = foldRight(ints, 0)(_ + _)
+
+  def foldProduct(ds: List[Double]): Double = foldRight(ds, 1.0)(_ + _)
+
+  // Exercise 8
+  val ex8 = foldRight(List(1,2,3), Nil: List[Int])(Cons(_, _))
+
+  // Exercise 9
+  def foldLength[A](as: List[A]): Int = {
+    def incrementRight[B](b: B, i: Int): Int = i + 1
+    foldRight(as, 0)(incrementRight(_,_))
+  }
+
+  // Exercise 10
+  //  def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = 
+
   val example = Cons(1, Cons(2, Cons(3, Nil)))
   val example2 = List(1, 2, 3)
   val total = sum(example)
