@@ -91,18 +91,32 @@ object List {
 
   // Exercise 12
   // First solution is not tail recursive
-  def append[A](as: List[A], a: A): List[A] = as match {
+  def appendOne[A](as: List[A], a: A): List[A] = as match {
     case Nil => Cons(a, Nil)
-    case Cons(a2, as2) => Cons(a2, append(as2, a))
+    case Cons(a2, as2) => Cons(a2, appendOne(as2, a))
   }
   
   def reverse[A](as: List[A]): List[A] = as match {
     case Nil => Nil
-    case Cons(a, as2) => append(reverse(as2), a)
+    case Cons(a, as2) => appendOne(reverse(as2), a)
   }
 
   // This solutions using foldLeft is tail recursive
   def foldReverse[A](as: List[A]): List[A] = foldLeft(as, Nil: List[A])((b, a) => Cons(a, b))
+
+  // Exercise 13
+  // Implement foldLeft in terms of foldRight
+  def foldLeft2[A, B](as: List[A], b: B)(f: (B, A) => B): B = foldRight(reverse(as), b)((a, b) => f(b, a))
+
+  // Exercise 14
+  // Implement append in terms of foldLeft or foldRight
+  def foldLeftAppend[A](as1: List[A], as2: List[A]): List[A] = foldLeft(reverse(as1), as2)((a,b) => Cons(b, a))
+  def foldRightAppend[A](as1: List[A], as2: List[A]): List[A] = foldRight(as1, as2)(Cons(_, _))
+
+  // Exercise 15
+  // Write a function that concatenates a list of lists into a single list, time complexity should be linear
+  // in total length of all the supplied lists
+  def concat[A](ass: List[List[A]]): List[A] = foldRight(ass, Nil: List[A])(foldRightAppend)
 
   val example = Cons(1, Cons(2, Cons(3, Nil)))
   val example2 = List(1, 2, 3)
