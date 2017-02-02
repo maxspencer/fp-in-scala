@@ -90,16 +90,19 @@ object List {
   def foldLeftLength[A](as: List[A]): Int = foldLeft(as, 0)((i, _) => i + 1)
 
   // Exercise 12
-  // First solution using append is non-tail recursive and naive
-  def append[A](as: List[A], a: A): List[A] = match as {
+  // First solution is not tail recursive
+  def append[A](as: List[A], a: A): List[A] = as match {
     case Nil => Cons(a, Nil)
     case Cons(a2, as2) => Cons(a2, append(as2, a))
   }
   
-  def reverse[A](as: List[A]): List[A] = match as {
+  def reverse[A](as: List[A]): List[A] = as match {
     case Nil => Nil
     case Cons(a, as2) => append(reverse(as2), a)
   }
+
+  // This solutions using foldLeft is tail recursive
+  def foldReverse[A](as: List[A]): List[A] = foldLeft(as, Nil: List[A])((b, a) => Cons(a, b))
 
   val example = Cons(1, Cons(2, Cons(3, Nil)))
   val example2 = List(1, 2, 3)
