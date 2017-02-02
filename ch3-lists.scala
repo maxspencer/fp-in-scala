@@ -48,6 +48,36 @@ object List {
     case Cons(b, bs) => Cons(a, bs)
   }
 
+  // Exercise 10
+  def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = {
+    def go(acc: B, as2: List[A]): B = as2 match {
+      case Nil => acc
+      case Cons(a, as3) => go(f(acc, a), as3)
+    }
+    go(z, as)
+  }
+
+  // Exercise 11
+  def foldLeftSum(ints: List[Int]): Int = foldLeft(ints, 0)(_ + _)
+
+  def foldLeftProduct(ds: List[Double]): Double = foldLeft(ds, 0.0)(_ * _)
+
+  def foldLeftLength[A](as: List[A]): Int = foldLeft(as, 0)((i, _) => i + 1)
+
+  // Exercise 12
+
+  // First solution using append is non-tail recursive and naive
+  def append[A](as: List[A], a: A): List[A] = match as {
+    case Nil => Cons(a, Nil)
+    case Cons(a2, as2) => Cons(a2, append(as2, a))
+  }
+  
+  def reverse[A](as: List[A]): List[A] = match as {
+    case Nil => Nil
+    case Cons(a, as2) => append(reverse(as2), a)
+  }
+  
+
   val example = Cons(1, Cons(2, Cons(3, Nil)))
   val example2 = List(1, 2, 3)
   val total = sum(example)
